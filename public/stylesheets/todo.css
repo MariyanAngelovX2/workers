@@ -1,0 +1,58 @@
+body{
+    background-image: url(worker.jpg);
+}
+
+a{
+    text-decoration: none;
+    color: black;
+}
+
+.table{
+    background-color: #B8E6DD;
+}
+
+.img-fluid{
+    width: 350px;
+    height: 250px;
+}
+
+.word-limitation {
+    max-width: 150px;
+    word-wrap: break-word;
+    white-space: pre-wrap;
+}
+.btn-task{
+    background-color: #FCF5EC;
+    border: none;
+    -webkit-text-fill-color: black;
+}
+
+.btn-task:hover{
+    background-color: #FCF5EC;
+}
+
+thead{
+    background-color: #02AD8B;
+}
+
+.btn-delete{
+    width: 99%;
+    background-color: #C9001C;
+    color: white;
+}
+
+.btn-delete:hover{
+    background-color: #C9001C;
+    color: white;
+}
+
+.btn-edit{
+    width: 99%;
+    background-color: #FFA203;
+    color: white;
+}
+
+.btn-edit:hover{
+    background-color: #FFA203;
+    color: white;
+}

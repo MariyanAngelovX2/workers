@@ -1,0 +1,7 @@
+body{
+    background-image: url(login.jpg);
+    background-size: cover;
+}
+.login-form {
+    margin-top: 10%;
+  }
