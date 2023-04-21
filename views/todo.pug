@@ -1,0 +1,226 @@
+html
+
+    head
+
+        link(rel="stylesheet", href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css", integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ", crossorigin="anonymous")
+        link(rel='stylesheet', href='/stylesheets/todo.css')
+
+        script(src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js", integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe", crossorigin="anonymous")
+
+    body
+
+        if info
+            h1.alert.alert-info!= info
+
+                a(href="logout" class="float-end me-5") ИЗХОД                        
+
+        div.container
+
+            h1(class="text-center") Работно табло
+
+            button.btn.btn-lg.btn-task.mb-3(data-bs-toggle="modal" data-bs-target="#modalAdd") Нова Ремонтна Дейност
+
+            table.table.table-striped.table-hover#mytable
+
+                thead.text-uppercase.font-weight-bold
+
+                    tr
+
+                        td id
+
+                        td Потребител
+
+                        td Описание
+
+                        td Статус
+
+                        td Преди Ремонт
+
+                        td След Ремонт
+
+                        td Създаден
+
+                        td Редактиран
+
+                        td Опции
+
+                tbody
+
+                    each row in rows
+
+                        tr
+
+                            td= row.id
+
+                            td= row.user
+
+                            td.word-limitation= row.task
+
+                            td.word-limitation= row.status
+
+                            td
+
+                                img.img-fluid.rounded.img-thumbnail(src=row.url)
+
+                            td 
+
+                                img.img-fluid.rounded.img-thumbnail(src=row.urll)
+
+                            td= row.date_created
+
+                            td= row.date_modified
+
+                            td
+                                div.row
+
+                                    a.btn.btn-edit.edit(href="javascript:void(0);" data-id=row.id data-task=row.task data-status=row.status data-url=row.url data-urll=row.urll) Редактиране
+
+                                    span &nbsp;&nbsp;&nbsp;
+
+                                    a.btn.btn-delete.delete(href="javascript:void(0);" data-id=row.id) Изтриване
+
+
+            //modal form ADD - File upload
+
+            form(action="/todo/upload" method="post" enctype="multipart/form-data")
+
+                div.modal.fade#modalAdd(tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true")
+
+                    div.modal-dialog(role="document")
+
+                        div.modal-content
+
+                            div.modal-header
+
+                                h5.modal-title#exampleModalLabel Нова Дейност
+
+                                button.btn-close(type="button" data-bs-dismiss="modal" aria-label="Close")
+
+                            div.modal-body
+
+                                div.form-group
+
+                                    textarea.form-control(name="task" placeholder=" Дейност " required)
+
+                                div.form-group
+
+                                    input.form-control(type="file" name="file")
+
+                            div.modal-footer
+
+                                button.btn.btn-secondary(type="button" data-bs-dismiss="modal") Откажи
+
+                                button.btn.btn-success(type="submit") Запази
+
+
+            //modal form DELETE
+
+            form#add-row-form(action="/todo/delete" method="post")
+
+                div.modal.fade#DeleteModal(tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true")
+
+                    div.modal-dialog
+
+                        div.modal-content
+
+                            div.modal-header
+
+                                h5.modal-title#modalLabel Потвърждение за изтриване
+
+                                button.btn-close(type="button" data-bs-dismiss="modal" aria-label="Close")
+
+                            div.modal-body
+
+                                strong Сигурен ли сте, че искате да изтриете дейността?
+
+                            div.modal-footer
+
+                                input.form-control.id(type="hidden" name="id" required)
+
+                                button.btn.btn-secondary(type="button" data-bs-dismiss="modal") Откажи
+
+                                button.btn.btn-danger(type="submit") Изтрий
+
+
+            //modal form EDIT/UPDATE
+
+            form(action="/todo/update" method="post")
+
+                div.modal.fade#EditModal(tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true")
+
+                    div.modal-dialog(role="document")
+
+                        div.modal-content
+
+                            div.modal-header
+
+                                h5.modal-title#modalLabel Редактиране на Дейността
+
+                                button.btn-close(type="button" data-bs-dismiss="modal" aria-label="Close")
+
+                            div.modal-body
+
+                                div.form-group
+
+                                    textarea.form-control.task(name="task" placeholder=" Дейност " required)
+
+                                div.form-group
+
+                                    input.form-control.status(name="status" placeholder=" Въведете Статус " required)
+
+                                div.form-group
+
+                                    input.form-control.url(type="text" name="url" placeholder=" Изберете Снимка ")
+
+                                div.form-group
+
+                                    input.form-control.urll(type="text" name="urll" placeholder=" Изберете Снимка ")
+
+                            div.modal-footer
+
+                                input.form-control.id(type="hidden" name="id" required)
+
+                                button.btn.btn-secondary(type="button" data-bs-dismiss="modal") Откажи
+
+                                button.btn.btn-info(type="submit") Актуализирай
+
+
+            script(src="https://cdn.jsdelivr.net/npm/jquery@3.6.4/dist/jquery.min.js")
+
+            script.
+
+                $(document).ready(function(){
+
+                    //showing modal form DELETE
+
+                    $('#mytable').on('click','.delete',function(){
+
+                        $('#DeleteModal').modal('show');
+
+                        $('.id').val($(this).data('id'));
+
+                    });
+
+                   
+
+                    //showing modal form EDIT
+
+                    $('#mytable').on('click','.edit',function(){
+
+                        $('#EditModal').modal('show');
+
+                        $('.id').val($(this).data('id'));
+
+                        $('.task').val($(this).data('task'));
+
+                        $('.url').val($(this).data('url'));
+
+                        $('.urll').val($(this).data('urll'));
+
+                        $('.status').val($(this).data('status'));
+
+                    });                
+
+                });
+
+            hr.mx-auto(width="80%")
